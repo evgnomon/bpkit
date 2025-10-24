@@ -1,6 +1,6 @@
 [project]
 name = "bpkit"
-version = "0.0.3"
+version = "0.0.4"
 description = "Blueprint development kit for Python"
 authors = [{ name = "Hamed Ghasemzadeh", email = "hg@evgnomon.org" }]
 readme = "README.md"
