@@ -1,5 +1,5 @@
 [project]
-name = "bluekit"
+name = "bpkit"
 version = "0.0.1"
 description = "Blueprint development kit for Python"
 authors = [{ name = "Hamed Ghasemzadeh", email = "hg@evgnomon.org" }]
@@ -19,9 +19,9 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://evgnomon.github.io/bluekit/"
-Repository = "https://github.com/evgnomon/bluekit"
-Documentation = "https://evgnomon.github.io/bluekit/"
+Homepage = "https://evgnomon.github.io/bpkit/"
+Repository = "https://github.com/evgnomon/bpkit"
+Documentation = "https://evgnomon.github.io/bpkit/"
 
 [dependency-groups]
 dev = [
@@ -42,7 +42,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/bluekit"]
+packages = ["src/bpkit"]
 
 [tool.mypy]
 files = ["src"]

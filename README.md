@@ -1,15 +1,15 @@
-# bluekit
+# bpkit
 
-[![Release](https://img.shields.io/github/v/release/evgnomon/bluekit)](https://img.shields.io/github/v/release/evgnomon/bluekit)
-[![Build status](https://img.shields.io/github/actions/workflow/status/evgnomon/bluekit/main.yml?branch=main)](https://github.com/evgnomon/bluekit/actions/workflows/main.yml?query=branch%3Amain)
-[![codecov](https://codecov.io/gh/evgnomon/bluekit/branch/main/graph/badge.svg)](https://codecov.io/gh/evgnomon/bluekit)
-[![Commit activity](https://img.shields.io/github/commit-activity/m/evgnomon/bluekit)](https://img.shields.io/github/commit-activity/m/evgnomon/bluekit)
-[![License](https://img.shields.io/github/license/evgnomon/bluekit)](https://img.shields.io/github/license/evgnomon/bluekit)
+[![Release](https://img.shields.io/github/v/release/evgnomon/bpkit)](https://img.shields.io/github/v/release/evgnomon/bpkit)
+[![Build status](https://img.shields.io/github/actions/workflow/status/evgnomon/bpkit/main.yml?branch=main)](https://github.com/evgnomon/bpkit/actions/workflows/main.yml?query=branch%3Amain)
+[![codecov](https://codecov.io/gh/evgnomon/bpkit/branch/main/graph/badge.svg)](https://codecov.io/gh/evgnomon/bpkit)
+[![Commit activity](https://img.shields.io/github/commit-activity/m/evgnomon/bpkit)](https://img.shields.io/github/commit-activity/m/evgnomon/bpkit)
+[![License](https://img.shields.io/github/license/evgnomon/bpkit)](https://img.shields.io/github/license/evgnomon/bpkit)
 
 Blueprint development kit for Python
 
-- **Github repository**: <https://github.com/evgnomon/bluekit/>
-- **Documentation** <https://evgnomon.github.io/bluekit/>
+- **Github repository**: <https://github.com/evgnomon/bpkit/>
+- **Documentation** <https://evgnomon.github.io/bpkit/>
 
 ## Getting started with your project
 
@@ -21,7 +21,7 @@ First, create a repository on GitHub with the same name as this project, and the
 git init -b main
 git add .
 git commit -m "init commit"
-git remote add origin git@github.com:evgnomon/bluekit.git
+git remote add origin git@github.com:evgnomon/bpkit.git
 git push -u origin main
 ```
 
@@ -63,8 +63,8 @@ To enable the code coverage reports, see [here](https://fpgmaas.github.io/cookie
 ## Releasing a new version
 
 - Create an API Token on [PyPI](https://pypi.org/).
-- Add the API Token to your projects secrets with the name `PYPI_TOKEN` by visiting [this page](https://github.com/evgnomon/bluekit/settings/secrets/actions/new).
-- Create a [new release](https://github.com/evgnomon/bluekit/releases/new) on Github.
+- Add the API Token to your projects secrets with the name `PYPI_TOKEN` by visiting [this page](https://github.com/evgnomon/bpkit/settings/secrets/actions/new).
+- Create a [new release](https://github.com/evgnomon/bpkit/releases/new) on Github.
 - Create a new tag in the form `*.*.*`.
 
 For more details, see [here](https://fpgmaas.github.io/cookiecutter-uv/features/cicd/#how-to-trigger-a-release).

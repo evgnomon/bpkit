@@ -1,4 +1,4 @@
-from bluekit.foo import foo
+from bpkit.foo import foo
 
 
 def test_foo():
