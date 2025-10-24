@@ -17,6 +17,10 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
+dependencies = [
+    "pyyaml>=6.0.3",
+    "pydantic>=2.0.0",
+]
 
 [project.urls]
 Homepage = "https://evgnomon.github.io/bpkit/"
