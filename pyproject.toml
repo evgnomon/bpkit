@@ -40,6 +40,7 @@ dev = [
     "mkdocs-material>=8.5.10",
     "mkdocstrings[python]>=0.26.1",
     "types-pyyaml>=6.0.12.20250915",
+    "poethepoet>=0.24.0",
 ]
 
 [build-system]
@@ -119,3 +120,66 @@ skip_empty = true
 [tool.coverage.run]
 branch = true
 source = ["src"]
+
+[tool.poe.tasks]
+# Install the virtual environment and install the pre-commit hooks
+install.sequence = [
+    { shell = "echo '🚀 Creating virtual environment using uv'" },
+    { cmd = "uv sync" },
+    { cmd = "uv run pre-commit install" },
+]
+install.help = "Install the virtual environment and install the pre-commit hooks"
+
+# Run code quality tools
+check.sequence = [
+    { shell = "echo '🚀 Checking lock file consistency with pyproject.toml'" },
+    { cmd = "uv lock --locked" },
+    { shell = "echo '🚀 Linting code: Running pre-commit'" },
+    { cmd = "uv run pre-commit run -a" },
+    { shell = "echo '🚀 Static type checking: Running mypy'" },
+    { cmd = "uv run mypy" },
+    { shell = "echo '🚀 Checking for obsolete dependencies: Running deptry'" },
+    { cmd = "uv run deptry src" },
+]
+check.help = "Run code quality tools"
+
+# Test the code with pytest
+test.cmd = "uv run python -m pytest --cov --cov-config=pyproject.toml --cov-report=xml"
+test.help = "Test the code with pytest"
+
+# Clean build artifacts
+clean-build.sequence = [
+    { shell = "echo '🚀 Removing build artifacts'" },
+    { script = "shutil:rmtree('dist', ignore_errors=True)" },
+]
+clean-build.help = "Clean build artifacts"
+
+# Build wheel file
+build.sequence = [
+    { ref = "clean-build" },
+    { shell = "echo '🚀 Creating wheel file'" },
+    { cmd = "uvx --from build pyproject-build --installer uv" },
+]
+build.help = "Build wheel file"
+
+# Publish a release to PyPI
+publish.sequence = [
+    { shell = "echo '🚀 Publishing.'" },
+    { cmd = "uvx twine upload --repository-url https://upload.pypi.org/legacy/ dist/*" },
+]
+publish.help = "Publish a release to PyPI"
+
+# Build and publish
+build-and-publish.sequence = [
+    { ref = "build" },
+    { ref = "publish" },
+]
+build-and-publish.help = "Build and publish"
+
+# Test if documentation can be built without warnings or errors
+docs-test.cmd = "uv run mkdocs build -s"
+docs-test.help = "Test if documentation can be built without warnings or errors"
+
+# Build and serve the documentation
+docs.cmd = "uv run mkdocs serve"
+docs.help = "Build and serve the documentation"
