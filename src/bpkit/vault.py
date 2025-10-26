@@ -3,6 +3,7 @@ GPG-based secret encryption/decryption utility.
 Processes data in memory without temporary files.
 """
 
+import json
 import os
 import shutil
 import subprocess
@@ -131,3 +132,81 @@ def decrypt_file(filename: str) -> None:
     except FileNotFoundError:
         print("Error: gpg command not found. Please install GnuPG.", file=sys.stderr)
         sys.exit(1)
+
+
+def secrets(name=""):
+    # Set environment variable
+    os.environ["EDITOR"] = "vi"
+
+    # Determine SECRET_FILE
+    home = Path.home()
+    if name:
+        secret_file = home / ".blueprint" / "secrets" / f"{name}.yaml"
+    else:
+        secret_file = home / ".blueprint" / "secrets" / "secrets.yaml"
+
+    # Determine VAULT_FILE
+    vault_file = name + ".vault" if name else "vault"
+
+    vault_file_path = home / ".blueprint" / "secrets" / f"{vault_file}.asc"
+
+    # Check if vault file exists
+    if not vault_file_path.exists():
+        print(f"Vault file not found: {vault_file_path}")
+        sys.exit(1)
+
+    # Check if secret file exists
+    if not secret_file.exists():
+        print(f"Secret file not found: {secret_file}")
+        sys.exit(1)
+
+    # Get vault password by running: vault -d $VAULT_FILE
+    try:
+        vault_password = subprocess.check_output(  # noqa: S603
+            ["vaultpy", "-d", vault_file.replace(".asc", "")],  # noqa: S607
+            text=True,
+            stderr=subprocess.PIPE,
+        ).strip()
+    except subprocess.CalledProcessError as e:
+        print(f"Error getting vault password: {e}")
+        sys.exit(1)
+
+    # Run ansible-vault view with password piped to stdin
+    ansible_vault = subprocess.Popen(  # noqa: S603
+        [  # noqa: S607
+            "ansible-vault",
+            "view",
+            str(secret_file),
+            "--vault-password-file",
+            "/dev/stdin",
+        ],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+
+    # Pipe output to yj
+    yj = subprocess.Popen(
+        ["yj"],  # noqa: S607
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+
+    # Send password to ansible-vault and pipe its output to yj
+    vault_stdout, vault_stderr = ansible_vault.communicate(input=vault_password)
+
+    if ansible_vault.returncode != 0:
+        print(f"Error from ansible-vault: {vault_stderr}", file=sys.stderr)
+        sys.exit(1)
+
+    # Send ansible-vault output to yj
+    yj_output, yj_error = yj.communicate(input=vault_stdout)
+
+    if yj.returncode != 0:
+        print(f"Error from yj: {yj_error}", file=sys.stderr)
+        sys.exit(1)
+
+    return json.loads(yj_output)  # Validate JSON
