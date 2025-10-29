@@ -5,7 +5,9 @@ Processes data in memory without temporary files.
 
 import json
 import os
+import secrets as secretslib
 import shutil
+import string
 import subprocess
 import sys
 from pathlib import Path
@@ -48,6 +50,49 @@ def user_gpg_key() -> str:
     if not user_key:
         raise GPGKeyNotConfiguredError
     return user_key
+
+
+def generate_password(
+    length: int = 32,
+    use_letters: bool = True,
+    use_digits: bool = True,
+    use_symbols: bool = True,
+) -> str:
+    """
+    Generate a cryptographically secure random password.
+
+    Args:
+        length: Length of the password (default: 20)
+        use_letters: Include uppercase and lowercase letters (default: True)
+        use_digits: Include digits 0-9 (default: True)
+        use_symbols: Include special characters (default: True)
+
+    Returns:
+        A randomly generated password string.
+
+    Raises:
+        ValueError: If length is less than 1 or no character sets are selected.
+    """
+    if length < 1:
+        msg = "Password length must be at least 1"
+        raise ValueError(msg)
+
+    # Build character set
+    chars = ""
+    if use_letters:
+        chars += string.ascii_letters
+    if use_digits:
+        chars += string.digits
+    if use_symbols:
+        chars += string.punctuation
+
+    if not chars:
+        msg = "At least one character set must be selected"
+        raise ValueError(msg)
+
+    # Generate password using cryptographically secure random
+    password = "".join(secretslib.choice(chars) for _ in range(length))
+    return password
 
 
 def encrypt_file(filename: str, gpg_key: str) -> None:
