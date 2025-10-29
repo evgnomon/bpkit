@@ -20,7 +20,11 @@ classifiers = [
 dependencies = [
     "pyyaml>=6.0.3",
     "pydantic>=2.0.0",
+    "click>=8.0.0",
 ]
+
+[project.scripts]
+bp = "bpkit.cli:bp"
 
 [project.urls]
 Homepage = "https://evgnomon.github.io/bpkit/"
